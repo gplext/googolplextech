@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  web:
+    image: nginx:alpine
+    container_name: googolplex_web
+    ports:
+      - "3081:80" # Maps local port 3081 to container port 80
+    volumes:
+      - .:/usr/share/nginx/html:ro # Mounts the current directory as read-only to Nginx html folder
+    restart: unless-stopped
