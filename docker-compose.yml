@@ -1,6 +1,6 @@
 services:
   web:
-    image: nginx:alpine
+    image: nginx
     container_name: googolplex_web
     ports:
       - "3081:80" # Maps local port 3081 to container port 80
