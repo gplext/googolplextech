@@ -174,6 +174,10 @@ nav {
     text-align: center;
     position: relative;
     overflow: hidden;
+    /* Establish a stacking context so the h1's filter-induced stacking context
+       is contained inside .hero (z=0) instead of escaping to the body, where
+       it could render in front of the fixed nav. */
+    z-index: 0;
 }
 
 .hero::before {
@@ -644,8 +648,8 @@ footer p {
 }
 
 @keyframes matrixScroll {
-    0% { transform: translateY(0); }
-    100% { transform: translateY(100px); }
+    0% { background-position: 0 0; }
+    100% { background-position: 0 100px; }
 }
 
 /* Blog Detail Page Styles */
@@ -746,70 +750,30 @@ footer p {
     }
 }
 
-/* Sticky Header for Scrolled Logo */
-.sticky-header {
-    position: fixed;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%) translateY(-150px);
-    background: rgba(10, 10, 15, 0.95);
-    backdrop-filter: blur(10px);
-    padding: 0.5rem 2rem;
-    border: 1px solid var(--neon-cyan);
-    border-top: none;
-    border-radius: 0 0 10px 10px;
-    z-index: 999;
-    transition: transform 0.4s ease-out, opacity 0.3s;
-    opacity: 0;
-    pointer-events: none;
-}
-
-.sticky-header.active {
-    transform: translateX(-50%) translateY(0);
-    opacity: 1;
-    pointer-events: all;
-}
-
-.sticky-header .logo-small {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 1.2rem;
-    font-weight: 900;
-    background: linear-gradient(45deg, var(--neon-cyan), var(--neon-pink));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-}
-
-/* Sticky Top Logo - Always fixed, just hidden initially */
+/* In-nav Sticky Logo — sits as a flex child on the left of .nav-container.
+   Always occupies its slot in the layout (so the menu doesn't shift); just
+   fades + slides in when scrolled, and out when at the top of the page. */
 .sticky-logo {
-    position: fixed;
-    top: 12px;
-    left: 50%;
-    transform: translateX(-50%) scale(0.6) translateY(-20px);
     font-family: 'Orbitron', sans-serif;
-    font-size: 1.1rem;
+    font-size: 1.3rem;
     font-weight: 900;
     background: linear-gradient(45deg, var(--neon-cyan), var(--neon-pink));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    opacity: 0;
-    pointer-events: none;
-    z-index: 1005;
-    padding: 0.4rem 1.2rem;
-    background-color: rgba(10, 10, 15, 0.85);
-    border: 1px solid var(--neon-cyan);
-    border-radius: 8px;
-    box-shadow: 0 4px 20px rgba(0, 255, 255, 0.2);
-    transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    text-transform: uppercase;
+    letter-spacing: 2px;
     white-space: nowrap;
-    backdrop-filter: blur(8px);
+    padding: 0.3rem 0;
+    opacity: 0;
+    transform: translateX(-8px) scale(0.95);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    pointer-events: none;
 }
 
 .sticky-logo.active {
     opacity: 1;
-    transform: translateX(-50%) scale(1) translateY(0);
+    transform: translateX(0) scale(1);
     pointer-events: all;
 }
 
@@ -882,28 +846,28 @@ html {
     scroll-padding-top: 100px;
 }
 
-/* Parallax Backdrop Layers */
+/* Parallax Backdrop Layers
+   Tile-sized backgrounds + modulo-wrapped translateY = seamless infinite parallax with zero gaps. */
 .city-backdrop {
     position: fixed;
-    top: -10%;
+    top: 0;
     left: 0;
     width: 100%;
-    height: 125%;
-    background: 
+    height: 100vh;
+    background:
         linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.8) 100%),
         url('https://images.unsplash.com/photo-1514565131-fce0801e5785?w=1920') center/cover;
     z-index: -3;
     filter: brightness(0.4) contrast(1.2);
-    will-change: transform;
 }
 
 .city-lights {
     position: fixed;
-    top: -5%;
+    top: -50vh;
     left: 0;
     width: 100%;
-    height: 115%;
-    background: 
+    height: 300vh;
+    background:
         radial-gradient(2px 2px at 20% 30%, var(--neon-cyan), transparent),
         radial-gradient(2px 2px at 60% 70%, var(--neon-pink), transparent),
         radial-gradient(1px 1px at 50% 50%, var(--neon-blue), transparent),
@@ -912,7 +876,8 @@ html {
         radial-gradient(2px 2px at 30% 80%, var(--neon-blue), transparent),
         radial-gradient(1px 1px at 70% 40%, var(--neon-cyan), transparent),
         radial-gradient(2px 2px at 40% 20%, var(--neon-pink), transparent);
-    background-size: 100% 100%;
+    background-size: 100% 100vh;
+    background-repeat: repeat-y;
     animation: lightsPulse 4s ease-in-out infinite;
     z-index: -2;
     will-change: transform;
@@ -920,10 +885,10 @@ html {
 
 .matrix-rain {
     position: fixed;
-    top: -15%;
+    top: -50vh;
     left: 0;
     width: 100%;
-    height: 130%;
+    height: 300vh;
     pointer-events: none;
     opacity: 0.03;
     z-index: -1;

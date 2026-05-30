@@ -15,15 +15,12 @@
     <!-- Navigation -->
     <nav id="main-nav">
         <div class="nav-container">
-            <!-- <div class="logo">GOOGOLPLEX TECH</div> -->
             <ul class="nav-menu">
                 <li>
                     <a href="index.html#about">Being Us ▾</a>
                     <div class="dropdown">
                         <a href="index.html#vision">Vision</a>
-                        <a href="index.html#mission">Mission</a>
                         <a href="index.html#directors">Directors' Message</a>
-                        <a href="index.html#path">The Path</a>
                     </div>
                 </li>
                 <li><a href="index.html#products">Products & Solutions</a></li>
@@ -44,14 +41,6 @@
             </ul>
         </div>
     </nav>
-
-    <!-- Sticky Top Logo (Hidden initially) -->
-    <div class="sticky-logo" id="sticky-logo">GOOGOLPLEX TECH</div>
-
-    <!-- Add Sticky Header Element (place right after nav) -->
-    <div class="sticky-header" id="sticky-header">
-        <span class="logo-small">GOOGOLPLEX TECH</span>
-    </div>
 
     <!-- Blog Detail Container -->
     <div class="blog-detail-container">
@@ -494,9 +483,6 @@
         
         <div class="social-links">
             <a href="#">LinkedIn</a>
-            <a href="#">Twitter</a>
-            <a href="#">GitHub</a>
-            <a href="#">Facebook</a>
         </div>
     </footer>
 
@@ -524,23 +510,24 @@
         // Consolidated Scroll Handler
         function handleScroll() {
             const scrollY = window.scrollY;
-            
-            // 1. Parallax Layers
-            if (cityBackdrop) cityBackdrop.style.transform = `translateY(${scrollY * 0.3}px)`;
-            if (cityLights) cityLights.style.transform = `translateY(${scrollY * 0.5}px)`;
-            if (matrixRain) matrixRain.style.transform = `translateY(${scrollY * 0.75}px)`;
-            
-            // 2. Logo Animation Trigger
-            if (aboutSection && heroTitle && stickyLogo) {
+            const vh = window.innerHeight;
+
+            // 1. Parallax Layers — modulo-wrapped translation keeps the tiled
+            //    backgrounds always within their buffered fixed containers, so
+            //    the dark body bg never peeks through.
+            if (cityLights) cityLights.style.transform = `translateY(${-((scrollY * 0.3) % vh)}px)`;
+            if (matrixRain) matrixRain.style.transform = `translateY(${-((scrollY * 0.5) % 100)}px)`;
+            // .city-backdrop stays statically fixed (photo can't tile cleanly).
+
+            // 2. Hero Title Fade Trigger
+            if (aboutSection && heroTitle) {
                 const triggerPoint = aboutSection.offsetTop - window.innerHeight * 0.3;
-                
+
                 if (scrollY > triggerPoint) {
                     heroTitle.classList.add('scrolled');
-                    stickyLogo.classList.add('active');
                     mainNav?.classList.add('scrolled');
                 } else {
                     heroTitle.classList.remove('scrolled');
-                    stickyLogo.classList.remove('active');
                     mainNav?.classList.remove('scrolled');
                 }
             }

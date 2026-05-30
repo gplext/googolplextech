@@ -1,9 +1,13 @@
 services:
-  web:
-    image: nginx
-    container_name: googolplex_web
+  webserver:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: googolplex_website
     ports:
-      - "3081:80" # Maps local port 3081 to container port 80
+      - "3050:4080"
     volumes:
-      - .:/usr/share/nginx/html:ro # Mounts the current directory as read-only to Nginx html folder
+      - ./:/googolplex_website
+    working_dir: /googolplex_website
+    command: python -m http.server 4080
     restart: unless-stopped

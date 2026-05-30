@@ -15,15 +15,12 @@
     <!-- Navigation -->
     <nav id="main-nav">
         <div class="nav-container">
-            <!-- <div class="logo">GOOGOLPLEX TECH</div> -->
             <ul class="nav-menu">
                 <li>
                     <a href="#about">Being Us ▾</a>
                     <div class="dropdown">
                         <a href="#vision">Vision</a>
-                        <a href="#mission">Mission</a>
                         <a href="#directors">Directors' Message</a>
-                        <a href="#path">The Path</a>
                     </div>
                 </li>
                 <li><a href="#products">Products & Solutions</a></li>
@@ -44,14 +41,6 @@
             </ul>
         </div>
     </nav>
-
-    <!-- Sticky Top Logo (Hidden initially) -->
-    <div class="sticky-logo" id="sticky-logo">GOOGOLPLEX TECH</div>
-
-    <!-- Add Sticky Header Element (place right after nav) -->
-    <div class="sticky-header" id="sticky-header">
-        <span class="logo-small">GOOGOLPLEX TECH</span>
-    </div>
 
     <!-- Hero Section -->
     <section class="hero" id="hero-section">
@@ -97,13 +86,13 @@
         <div class="directors-container">
             <div class="director-card fade-in">
                 <h3>Saad Gul</h3>
-                <p class="title">Director & Chief Technology Officer</p>
+                <p class="title">Chief Executive Officer</p>
                 <p class="message">"At Googolplex Tech, we believe that the future is built on the foundations of the past. Our commitment is to deliver technology solutions that are not just innovative, but timeless. From the bustling streets of Mall Road to the corporate hub of Cantt, we're here to transform Pakistan's digital landscape."</p>
             </div>
             
             <div class="director-card fade-in">
                 <h3>Mohammad Nasr Ullah</h3>
-                <p class="title">Director & Chief Operations Officer</p>
+                <p class="title">Director, Investor, & Business Strategist</p>
                 <p class="message">"Excellence in execution, integrity in practice, and innovation in thought—these are the pillars upon which we've built Googolplex Tech. We're not just building software; we're building relationships and shaping the future of IT in Pakistan."</p>
             </div>
         </div>
@@ -115,8 +104,8 @@
         
         <div class="services-grid">
             <div class="service-item fade-in">
-                <h3>⚡ Custom Software Development</h3>
-                <p>Bespoke software solutions tailored to your unique business needs. From enterprise applications to mobile solutions, we build technology that scales with your ambition.</p>
+                <h3>⚡ Custom Technology Development</h3>
+                <p>Bespoke technology solutions tailored to your unique business needs. From enterprise applications to mobile solutions, we build technology that scales with your ambition.</p>
             </div>
             
             <div class="service-item fade-in">
@@ -168,7 +157,7 @@
         </div>
         
         <div class="terminal-text" style="margin-top: 3rem; text-align: center;">
-            Ready to invest in the future? Contact our investment team at investments@googolplextech.com
+            Ready to partner with us and shape the future? If you have a new tech product feel free to contact us.
         </div>
     </section>
 
@@ -284,7 +273,7 @@
             <div class="contact-card fade-in">
                 <div class="contact-icon">📍</div>
                 <h3>Visit Us</h3>
-                <p>Mall Road, Lahore<br>Office: Cantt, Lahore<br>Pakistan</p>
+                <p>7/83 Mall Road(near Dandy design), Lahore<br>Office: Cantt, Lahore<br>Pakistan</p>
             </div>
             
             <div class="contact-card fade-in">
@@ -298,7 +287,7 @@
                 <div class="contact-icon">✉</div>
                 <h3>Email Us</h3>
                 <p><a href="mailto:saadg@googolplextech.com">saadg@googolplextech.com</a></p>
-                <p style="margin-top: 1rem; font-size: 1rem;">We respond within 24 hours</p>
+                <p style="margin-top: 1rem; font-size: 1rem;">We respond within 48 hours</p>
             </div>
         </div>
         
@@ -317,10 +306,7 @@
         <p>© 2026 Googolplex Tech. All rights reserved.</p>
         
         <div class="social-links">
-            <a href="#">LinkedIn</a>
-            <a href="#">Twitter</a>
-            <a href="#">GitHub</a>
-            <a href="#">Facebook</a>
+            <a href="https://www.linkedin.com/company/googolplex-tech">LinkedIn</a>
         </div>
     </footer>
 
@@ -348,23 +334,24 @@
         // Consolidated Scroll Handler
         function handleScroll() {
             const scrollY = window.scrollY;
-            
-            // 1. Parallax Layers
-            if (cityBackdrop) cityBackdrop.style.transform = `translateY(${scrollY * 0.3}px)`;
-            if (cityLights) cityLights.style.transform = `translateY(${scrollY * 0.5}px)`;
-            if (matrixRain) matrixRain.style.transform = `translateY(${scrollY * 0.75}px)`;
-            
-            // 2. Logo Animation Trigger
-            if (aboutSection && heroTitle && stickyLogo) {
+            const vh = window.innerHeight;
+
+            // 1. Parallax Layers — modulo-wrapped translation keeps the tiled
+            //    backgrounds always within their buffered fixed containers, so
+            //    the dark body bg never peeks through.
+            if (cityLights) cityLights.style.transform = `translateY(${-((scrollY * 0.3) % vh)}px)`;
+            if (matrixRain) matrixRain.style.transform = `translateY(${-((scrollY * 0.5) % 100)}px)`;
+            // .city-backdrop stays statically fixed (photo can't tile cleanly).
+
+            // 2. Hero Title Fade Trigger
+            if (aboutSection && heroTitle) {
                 const triggerPoint = aboutSection.offsetTop - window.innerHeight * 0.3;
-                
+
                 if (scrollY > triggerPoint) {
                     heroTitle.classList.add('scrolled');
-                    stickyLogo.classList.add('active');
                     mainNav?.classList.add('scrolled');
                 } else {
                     heroTitle.classList.remove('scrolled');
-                    stickyLogo.classList.remove('active');
                     mainNav?.classList.remove('scrolled');
                 }
             }
