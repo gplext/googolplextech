@@ -2,7 +2,7 @@ services:
   webserver:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: dockerfile
     container_name: googolplex_website
     ports:
       - "3050:4080"
